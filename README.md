@@ -7,7 +7,7 @@
 <div align="center">
   <!-- PROJECT LOGO -->
   <br />
-      <img alt="colombian-grid Logo" src="./docs/assets/portrait-logo.png" alt="colombian-grid Logo" width="400px">
+      <img alt="colombian-grid Logo" src="./docs/assets/portrait-logo.png" width="400px">
   <br />
   <p><i>La digitalización de la red colombiana a una línea</i></p>
 </div>
