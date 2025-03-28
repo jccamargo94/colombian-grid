@@ -1,0 +1,53 @@
+site_name: colombian-grid
+site_url: https://jccamargo94.github.io/colombian-grid/
+repo_url: https://github.com/jccamargo94/colombian-grid
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - content.tabs
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Cambiar a modo claro
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: google  # Usar estilo Google para docstrings
+          rendering:
+            show_root_heading: true
+            show_source: true
+  - search:
+      lang: es
+      separator: '[\s\-\.]+'
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Inicio: index.md
+  - Guía Rápida: guia.md
+  - Referencia API: api-reference.md
+  - Ejemplos: ejemplos.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jccamargo94/colombian-grid
+    - icon: fontawesome/solid/book
+      link: https://jccamargo94.github.io/colombian-grid/
