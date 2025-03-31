@@ -1,5 +1,5 @@
-from src.core.base.interfaces.paratec.generators import GeneratorFetcher
-from src.core.infra.http.httpx import AsyncHttpClient, SyncHttpClient
+from colombian_grid.core.base.interfaces.paratec.generators import GeneratorFetcher
+from colombian_grid.core.infra.http.httpx import AsyncHttpClient, SyncHttpClient
 
 
 class AsyncParatecClient:

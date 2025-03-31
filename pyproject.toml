@@ -3,7 +3,10 @@ name = "colombian-grid"
 version = "0.0.1"
 description = "Code to extract-process and post the currently available colombian grid from public data"
 readme = "README.md"
-requires-python = ">=3.12"
+authors = [
+    { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
+]
+requires-python = ">=3.11"
 dependencies = [
     "httpx==0.28.1",
     "pydantic==2.10.6",
@@ -16,3 +19,7 @@ dev = [
     "pytest==8.3.5",
     "pytest-cov==6.0.0",
 ]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
