@@ -1,7 +1,7 @@
 import pytest
 import httpx
 from unittest.mock import AsyncMock, MagicMock, patch
-from src.core.infra.http.httpx.async_client import AsyncHttpClient
+from colombian_grid.core.infra.http.httpx.async_client import AsyncHttpClient
 
 
 @pytest.fixture

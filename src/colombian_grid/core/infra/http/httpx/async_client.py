@@ -1,7 +1,7 @@
 import asyncio
 import httpx
 
-from src.core.infra.http.base import HttpClientBase
+from colombian_grid.core.infra.http.base import HttpClientBase
 
 
 class AsyncHttpClient(HttpClientBase):
