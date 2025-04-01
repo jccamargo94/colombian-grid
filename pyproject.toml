@@ -1,10 +1,20 @@
 [project]
 name = "colombian-grid"
 version = "0.0.1"
-description = "Code to extract-process and post the currently available colombian grid from public data"
+description = "Extract and process the currently available colombian grid public data"
 readme = "README.md"
+license = "LICENSE"
 authors = [
     { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
+]
+maintainers = [
+    { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
+]
+keywords = ["colombian", "grid", "extraction", "digitalization"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Linux",
 ]
 requires-python = ">=3.11"
 dependencies = [
@@ -21,5 +31,5 @@ dev = [
 ]
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
