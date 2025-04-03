@@ -1,5 +1,6 @@
 from colombian_grid.core.base.interfaces.paratec.generators import GeneratorFetcher
 from colombian_grid.core.base.interfaces.paratec.transmission import TransmissionFetcher
+from colombian_grid.core.base.interfaces.paratec.hydrology import HydroFetcher
 from colombian_grid.core.infra.http.httpx import AsyncHttpClient
 
 
@@ -21,6 +22,7 @@ class AsyncParatecClient:
         self._http_client = AsyncHttpClient()
         self._generator_fetcher = GeneratorFetcher(self._http_client)
         self._transmission_fetcher = TransmissionFetcher(self._http_client)
+        self._hydro_fetcher = HydroFetcher(self._http_client)
 
     async def get_generation_data(self):
         """
@@ -48,3 +50,12 @@ class AsyncParatecClient:
             The transmission line data.
         """
         return await self._transmission_fetcher.get_transmission_line_data()
+
+    async def get_hydro_data(self):
+        """
+        Asynchronously retrieves hydro data using the injected hydro fetcher.
+
+        Returns:
+            The data returned by the hydro fetcher.
+        """
+        return await self._hydro_fetcher.get_hydro_data()
