@@ -7,3 +7,8 @@ TRANSMISSION_LINE_URL = (
 )
 
 SUBSTATION_URL = "https://paratecbackend.xm.com.co/mapas/api/TransmissionMap/getMarkers"
+
+
+HYDROLOGY_URL = (
+    "https://paratecbackend.xm.com.co/mapas/api/HydrologyMap/HydrologyMapInfo"
+)
