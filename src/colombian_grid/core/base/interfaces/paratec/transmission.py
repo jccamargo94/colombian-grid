@@ -30,7 +30,8 @@ class TransmissionFetcher(APIDataSource):
         get_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
             Fetches data from a specified URL and optionally validates it against a pydantic schema.
 
-        fetch_generator_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
+        get_transmission_line_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
+        get_substation_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
     """
 
     def __init__(
