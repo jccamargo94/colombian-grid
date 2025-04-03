@@ -1,6 +1,6 @@
 [project]
 name = "colombian-grid"
-version = "0.0.1"
+version = "0.0.2"
 description = "Extract and process the currently available colombian grid public data"
 readme = "README.md"
 license = "LICENSE"
