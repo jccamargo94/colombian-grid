@@ -11,11 +11,7 @@ maintainers = [
     { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
 ]
 keywords = ["colombian", "grid", "extraction", "digitalization"]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: Linux",
-]
+
 requires-python = ">=3.11"
 dependencies = [
     "httpx==0.28.1",
@@ -31,5 +27,5 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
