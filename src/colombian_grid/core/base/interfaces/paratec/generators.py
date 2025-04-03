@@ -3,9 +3,9 @@ from typing import Optional
 from httpx import Response
 from pydantic import BaseModel, AnyHttpUrl
 
-from src.core.base.interfaces.base import APIDataSource
-from src.core.infra.http.httpx.async_client import AsyncHttpClient
-from src.core.base.interfaces.paratec.utils import GENERATOR_DATA_URL
+from colombian_grid.core.base.interfaces.base import APIDataSource
+from colombian_grid.core.infra.http.httpx.async_client import AsyncHttpClient
+from colombian_grid.core.base.interfaces.paratec.utils import GENERATOR_DATA_URL
 
 
 class GeneratorFetcher(APIDataSource):

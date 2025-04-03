@@ -1,9 +1,18 @@
 [project]
 name = "colombian-grid"
-version = "0.0.1"
-description = "Code to extract-process and post the currently available colombian grid from public data"
+version = "0.0.2"
+description = "Extract and process the currently available colombian grid public data"
 readme = "README.md"
-requires-python = ">=3.12"
+license = "LICENSE"
+authors = [
+    { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
+]
+maintainers = [
+    { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
+]
+keywords = ["colombian", "grid", "extraction", "digitalization"]
+
+requires-python = ">=3.11"
 dependencies = [
     "httpx==0.28.1",
     "pydantic==2.10.6",
@@ -14,5 +23,10 @@ dev = [
     "debugpy==1.8.13",
     "pre-commit==4.2.0",
     "pytest==8.3.5",
+    "pytest-asyncio==0.26.0",
     "pytest-cov==6.0.0",
 ]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
