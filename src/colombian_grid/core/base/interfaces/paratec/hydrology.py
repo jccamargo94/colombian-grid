@@ -32,7 +32,14 @@ class HydroFetcher(APIDataSource):
         self._http_client = http_client
         self._url = url
 
-    async def get_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
+    async def get_raw_data(self) -> dict:
+        response: Response = await self._http_client.get(self._url)
+        response.raise_for_status()
+        return response.json()
+
+    async def get_data(
+        self, *, output_schema: Optional[BaseModel] = None
+    ) -> dict | BaseModel:
         """Asynchronously retrieves data from the specified URL.
         Args:
             output_schema (Optional[BaseModel], optional): A pydantic model to validate the data against.
@@ -45,17 +52,12 @@ class HydroFetcher(APIDataSource):
             HTTPError: If the HTTP request returns an error status code.
         """
 
-        response: Response = await self._http_client.get(self._url)
-        response.raise_for_status()
-        return (
-            output_schema.model_validate(response.json())
-            if output_schema
-            else response.json()
-        )
+        response: dict = await self.get_raw_data()
+        return output_schema.model_validate(response) if output_schema else response
 
     async def get_hydro_data(
         self, *, output_schema: Optional[BaseModel] = None
-    ) -> list:
+    ) -> dict | BaseModel:
         """Asynchronously retrieves hydrological data.
         Args:
             output_schema (Optional[BaseModel], optional): An optional Pydantic model

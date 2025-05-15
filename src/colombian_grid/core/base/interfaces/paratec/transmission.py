@@ -44,9 +44,14 @@ class TransmissionFetcher(APIDataSource):
         self._transmission_line_url = transmission_line_url
         self._substation_url = substation_url
 
+    async def get_raw_data(self, *, url: str) -> dict:
+        response: Response = await self._http_client.get(url)
+        response.raise_for_status()
+        return response.json()
+
     async def get_data(
         self, *, url: str, output_schema: Optional[BaseModel] = None
-    ) -> list:
+    ) -> dict | BaseModel:
         """Fetches data from a specified URL and optionally validates it against a pydantic schema.
 
         Retrieves data from the given URL using the asynchronous HTTP client.
@@ -59,17 +64,12 @@ class TransmissionFetcher(APIDataSource):
         Returns:
             list: The fetched data, either as a list or a validated pydantic model.
         """
-        response: Response = await self._http_client.get(url)
-        response.raise_for_status()
-        return (
-            output_schema.model_validate(response.json())
-            if output_schema
-            else response.json()
-        )
+        response: dict = await self.get_raw_data(url=url)
+        return output_schema.model_validate(response) if output_schema else response
 
     async def get_transmission_line_data(
         self, *, output_schema: Optional[BaseModel] = None
-    ) -> list:
+    ) -> dict | BaseModel:
         """
         Retrieves transmission data from the specified URL.
 
@@ -87,7 +87,7 @@ class TransmissionFetcher(APIDataSource):
 
     async def get_substation_data(
         self, *, output_schema: Optional[BaseModel] = None
-    ) -> list:
+    ) -> dict | BaseModel:
         """
         Asynchronously retrieves substation data from the specified URL.
 

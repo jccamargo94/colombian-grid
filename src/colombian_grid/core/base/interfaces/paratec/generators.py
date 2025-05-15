@@ -23,28 +23,41 @@ class GeneratorFetcher(APIDataSource):
         self._http_client = http_client
         self._url = url
 
-    async def get_data(self, *, output_schema: Optional[BaseModel] = None) -> list:
+    async def get_raw_data(self) -> dict:
+        """
+        Fetches raw generator data from the configured API endpoint.
+
+        This method sends an asynchronous HTTP GET request to the generator data URL and returns the parsed JSON response.
+
+        Returns:
+            dict: The JSON response from the API as a dictionary.
+
+        Raises:
+            httpx.HTTPStatusError: If the HTTP request returns an error status code.
+        """
+        response: Response = await self._http_client.get(self._url)
+        response.raise_for_status()
+        return response.json()
+
+    async def get_data(
+        self, *, output_schema: Optional[BaseModel] = None
+    ) -> dict | BaseModel:
         """
         Retrieves data from multiple endpoints.
         Args:
             url (AnyHttpUrl | str): The URL to fetch data from. This argument is not used,
             as the method iterates over the `endpoints` attribute.
         Returns:
-            list: A list containing the combined JSON responses from all endpoints.
+            dict: A dict containing the combined JSON responses from all endpoints.
         Raises:
             httpx.HTTPStatusError: If any of the HTTP requests return an error status code.
         """
-        response: Response = await self._http_client.get(self._url)
-        response.raise_for_status()
-        return (
-            output_schema.model_validate(response.json())
-            if output_schema
-            else response.json()
-        )
+        response: dict = await self.get_raw_data()
+        return output_schema.model_validate(response) if output_schema else response
 
     async def fetch_generator_data(
         self, *, output_schema: Optional[BaseModel] = None
-    ) -> list:
+    ) -> dict | BaseModel:
         """
         Retrieves data from multiple endpoints.
         Args:

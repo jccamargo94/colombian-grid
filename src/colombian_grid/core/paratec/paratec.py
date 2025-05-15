@@ -42,14 +42,16 @@ class AsyncParatecClient:
         """
         return await self._transmission_fetcher.get_substation_data()
 
-    async def get_transmission_line_data(self):
+    async def get_transmission_line_data(self, *, output_schema=None):
         """
         Retrieves transmission line data.
 
         Returns:
             The transmission line data.
         """
-        return await self._transmission_fetcher.get_transmission_line_data()
+        return await self._transmission_fetcher.get_transmission_line_data(
+            output_schema=output_schema
+        )
 
     async def get_hydro_data(self):
         """
