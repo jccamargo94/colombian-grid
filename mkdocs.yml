@@ -2,6 +2,8 @@ site_name: colombian-grid
 site_url: https://jccamargo94.github.io/colombian-grid/
 repo_url: https://github.com/jccamargo94/colombian-grid
 
+docs_dir: docs
+
 theme:
   name: material
   features:

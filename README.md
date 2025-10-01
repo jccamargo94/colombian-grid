@@ -15,15 +15,22 @@
 
 ✨⚡ Query, extract, and process available information from the Colombian energy market with Python.
 
+[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue)](https://jccamargo94.github.io/colombian-grid/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+
 ## About The Project
 
-`colombian-grid` is a Python library designed to provide a simple and efficient interface to access and process public data from the Colombian electricity market.
+`colombian-grid` is a Python library designed to provide a simple and efficient interface to access and process public data from the Colombian electricity market through the Paratec and XM APIs.
 
 ### Key Features
 
-- 🧠 **Generators**: Query detailed information about the current power generators in the market.
-- 📊 **Data Extraction**: Easily extract data sets for analysis and reporting.
-- 🐍 **Pythonic**: A clean, intuitive, and easy-to-use API.
+- 🔌 **Multiple Data Sources**: Access data from both Paratec (infrastructure) and XM (market data) APIs
+- ⚡ **Async & Sync Clients**: Choose between asynchronous clients for high performance or synchronous for simplicity
+- 🤖 **Automatic Chunking**: Handles large date ranges automatically, respecting API restrictions
+- � **Built-in Retry Logic**: Exponential backoff with jitter for handling transient errors
+- 📊 **Pandas Integration**: Returns data as pandas DataFrames for easy analysis
+- ✅ **Type Safety**: Optional Pydantic schema validation for API responses
 
 ## Installation
 
@@ -33,18 +40,80 @@
 pip install colombian-grid
 ```
 
-## Usage
+## Quick Start
 
-Here's a quick example of how to get started and fetch information about the generators.
+### XM API - Market Data
 
 ```python
-from colombian_grid.generators import get_generators_info
+import asyncio
+from datetime import date
+from colombian_grid.core.xm import AsyncXMClient
 
-# Fetch a pandas DataFrame with information about all generators
-generators_df = get_generators_info()
+async def main():
+    async with AsyncXMClient() as client:
+        # Get system generation data
+        data = await client.get_data(
+            metric="Gene",
+            entity="Sistema",
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 31)
+        )
+        print(data.head())
 
-# Display the first 5 rows of the DataFrame
-print(generators_df.head())
+asyncio.run(main())
+```
+
+### Paratec API - Infrastructure Data
+
+```python
+import asyncio
+from colombian_grid.core.paratec import AsyncParatecClient
+
+async def main():
+    client = AsyncParatecClient()
+
+    # Get generator data
+    generators = await client.get_generation_data()
+    print(f"Found {len(generators)} generators")
+
+    await client._http_client.close()
+
+asyncio.run(main())
+```
+
+## Documentation
+
+For comprehensive guides, API reference, and examples, visit our [documentation site](https://jccamargo94.github.io/colombian-grid/).
+
+### Building Documentation Locally
+
+```bash
+# Install documentation dependencies
+uv pip install mkdocs mkdocs-material "mkdocstrings[python]"
+
+# Build and serve documentation
+uv run mkdocs serve
+```
+
+The documentation will be available at `http://127.0.0.1:8000`.
+
+## Development
+
+This project uses `uv` for dependency management. To set up a development environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/jccamargo94/colombian-grid.git
+cd colombian-grid
+
+# Install dependencies
+uv sync
+
+# Run tests
+uv run pytest
+
+# Run pre-commit hooks
+uv run pre-commit run --all-files
 ```
 
 ## Have questions or suggestions?
