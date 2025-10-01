@@ -11,11 +11,13 @@ maintainers = [
     { name = "Camilo Camargo", email = "kamilo1494@gmail.com" }
 ]
 keywords = ["colombian", "grid", "extraction", "digitalization"]
+url = "https://github.com/jccamargo94/colombian-grid"
 
 requires-python = ">=3.11"
 dependencies = [
     "httpx==0.28.1",
     "pydantic==2.10.6",
+    "pandas>=2.0.0",
 ]
 
 [dependency-groups]
@@ -25,8 +27,23 @@ dev = [
     "pytest==8.3.5",
     "pytest-asyncio==0.26.0",
     "pytest-cov==6.0.0",
+    "python-semantic-release==9.8.3",
+]
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.25.0",
 ]
 
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.semantic_release]
+version_toml = "pyproject.toml:project.version"
+branch = "develop"
+changelog_file = "CHANGELOG.md"
+build_command = "pip install pdm && pdm build"
+dist_path = "dist/"
+upload_to_pypi = true
+upload_to_release = true
