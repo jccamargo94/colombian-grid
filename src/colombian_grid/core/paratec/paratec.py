@@ -14,6 +14,12 @@ class AsyncParatecClient:
         _generator_fetcher (GeneratorFetcher): A fetcher for retrieving generation data.
         _transmission_fetcher (TransmissionFetcher): A fetcher for retrieving transmission data.
         _hydro_fetcher (HydroFetcher): A fetcher for retrieving hydrology data.
+
+    Methods:
+        get_generation_data(): Asynchronously retrieves generation data.
+        get_substation_data(): Asynchronously retrieves substation data.
+        get_transmission_line_data(): Asynchronously retrieves transmission line data.
+        get_hydro_data(): Asynchronously retrieves hydrology data.
     """
 
     def __init__(self):
