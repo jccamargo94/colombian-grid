@@ -1,8 +1,8 @@
-# Referencia del API
+# API Reference
 
-Esta sección contiene la referencia técnica de las clases y métodos principales de `colombian-grid`.
+This section contains the technical reference for the main classes and methods of `colombian-grid`, generated automatically from the source code's docstrings.
 
-## Módulo `colombian_grid.core.xm`
+## Module `colombian_grid.core.xm`
 
 ::: colombian_grid.core.xm.AsyncXMClient
     handler: python
@@ -18,7 +18,7 @@ Esta sección contiene la referencia técnica de las clases y métodos principal
         - get_available_metrics
         - get_data
 
-## Módulo `colombian_grid.core.paratec`
+## Module `colombian_grid.core.paratec`
 
 ::: colombian_grid.core.paratec.AsyncParatecClient
     handler: python

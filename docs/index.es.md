@@ -24,13 +24,8 @@
 - **Clientes Sincrónicos y Asincrónicos**: Ofrece flexibilidad para integrarse tanto en proyectos asíncronos como en scripts síncronos tradicionales.
 
 ## ¿Cómo empezar?
-Instalar este paquete es muy sencillo. Solo necesitas ejecutar el siguiente comando:
 
-```bash
-pip install colombian-grid
-```
-
-¡Y listo! Ya puedes comenzar a usarlo en tus proyectos.
+Instala el paquete con `pip install colombian-grid` y sigue la guía [Comenzando](getting-started.md) para tu primera consulta a XM o Paratec en pocos minutos.
 
 ## ¿Tienes dudas o sugerencias?
 Consulta nuestra [documentación](https://jccamargo94.github.io/colombian-grid/) o abre un issue en nuestro repositorio. Estamos aquí para ayudarte. 😊
