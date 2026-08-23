@@ -6,6 +6,7 @@ docs_dir: docs
 
 theme:
   name: material
+  favicon: assets/favicon.svg
   features:
     - navigation.tabs
     - navigation.indexes

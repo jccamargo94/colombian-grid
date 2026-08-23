@@ -1,36 +1,35 @@
 <div align="center">
-  <h1 align="center">Digitizing the Colombian Grid</h1>
-  <h3 align="center">Carry all the information of the Colombian grid with you</h3>
+  <img alt="colombian-grid logo" src="./docs/assets/logo.svg" width="70">
+  <h1>Colombian Grid</h1>
+  <p><i>Query, extract, and process public data from the Colombian electricity market with Python.</i></p>
 </div>
 
 <div align="center">
-  <!-- PROJECT LOGO -->
-  <br />
-      <img alt="colombian-grid Logo" src="./docs/assets/portrait-logo.png" width="400px">
-  <br />
-  <p><i>The digitization of the Colombian grid in one line</i></p>
+
+[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-070394)](https://jccamargo94.github.io/colombian-grid/)
+
 </div>
 
 ---
 
-✨⚡ Query, extract, and process available information from the Colombian energy market with Python.
-
-[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue)](https://jccamargo94.github.io/colombian-grid/)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-
 ## About The Project
 
-`colombian-grid` is a Python library designed to provide a simple and efficient interface to access and process public data from the Colombian electricity market through the Paratec and XM APIs.
+`colombian-grid` is a Python library that provides a simple, async-first interface to access and process public data from the Colombian electricity market. Today it implements two data sources:
+
+- **[Paratec](https://paratec.xm.com.co/)**: infrastructure data — generators, transmission lines, substations, and hydrology.
+- **[XM](https://www.xm.com.co/)**: market data — generation, demand, prices, and other metrics, with automatic date-range chunking and a pandas `DataFrame` output.
 
 ### Key Features
 
-- 🔌 **Multiple Data Sources**: Access data from both Paratec (infrastructure) and XM (market data) APIs
-- ⚡ **Async & Sync Clients**: Choose between asynchronous clients for high performance or synchronous for simplicity
-- 🤖 **Automatic Chunking**: Handles large date ranges automatically, respecting API restrictions
-- � **Built-in Retry Logic**: Exponential backoff with jitter for handling transient errors
-- 📊 **Pandas Integration**: Returns data as pandas DataFrames for easy analysis
-- ✅ **Type Safety**: Optional Pydantic schema validation for API responses
+- 🔌 **Multiple Data Sources**: Paratec (infrastructure) and XM (market data) APIs
+- ⚡ **Async & Sync Clients**: async clients for high throughput, plus a sync XM client for simple scripts
+- 🤖 **Automatic Chunking**: XM requests automatically split large date ranges to respect API limits
+- 🔁 **Built-in Retry Logic**: exponential backoff with jitter for transient errors
+- 📊 **Pandas Integration**: XM data is returned as pandas DataFrames for easy analysis
+- ✅ **Type Safety**: fully type-hinted (ships a `py.typed` marker), with optional Pydantic schema validation
 
 ## Installation
 
@@ -42,12 +41,18 @@ pip install colombian-grid
 
 ## Quick Start
 
+Import the clients from the top-level package:
+
+```python
+from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient
+```
+
 ### XM API - Market Data
 
 ```python
 import asyncio
 from datetime import date
-from colombian_grid.core.xm import AsyncXMClient
+from colombian_grid import AsyncXMClient
 
 async def main():
     async with AsyncXMClient() as client:
@@ -63,23 +68,26 @@ async def main():
 asyncio.run(main())
 ```
 
+`SyncXMClient` mirrors the same `get_data(...)` / `get_available_metrics()` interface for non-async scripts, using `with SyncXMClient() as client: ...`.
+
 ### Paratec API - Infrastructure Data
 
 ```python
 import asyncio
-from colombian_grid.core.paratec import AsyncParatecClient
+from colombian_grid import AsyncParatecClient
 
 async def main():
-    client = AsyncParatecClient()
+    async with AsyncParatecClient() as client:
+        # Get generator data
+        generators = await client.get_generation_data()
+        print(f"Found {len(generators)} generators")
 
-    # Get generator data
-    generators = await client.get_generation_data()
-    print(f"Found {len(generators)} generators")
-
-    await client._http_client.close()
+        # Also available: get_substation_data(), get_transmission_line_data(), get_hydro_data()
 
 asyncio.run(main())
 ```
+
+Both `AsyncParatecClient` and `AsyncXMClient` accept optional `timeout` and `max_retries` constructor arguments and support the `async with` context manager, which closes the underlying HTTP connection automatically.
 
 ## Documentation
 
@@ -115,6 +123,10 @@ uv run pytest
 # Run pre-commit hooks
 uv run pre-commit run --all-files
 ```
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
 
 ## Have questions or suggestions?
 

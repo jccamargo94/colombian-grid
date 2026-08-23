@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `AsyncSourceClient` shared base class providing HTTP lifecycle management (`close()`, async context manager) for async data-source clients; `AsyncParatecClient` now supports `async with` and configurable `timeout`/`max_retries`, matching `AsyncXMClient`
+- Top-level package re-exports: `from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient`
+- `py.typed` marker (PEP 561) so downstream type checkers recognize the package as typed
+- Refined SVG logo (`docs/assets/logo.svg`) and a reduced favicon glyph (`docs/assets/favicon.svg`), wired as the mkdocs site favicon
 - XM API interface with AsyncXMClient and SyncXMClient for accessing Colombian electricity market data
 - Automatic date chunking for large time ranges (respects API limits: 30 days for hourly/daily, 731 for monthly)
 - Support for filtering data by resource codes, agent codes, and other parameters
@@ -27,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `APIDataSource` is now generic (`APIDataSource[T]`) instead of lying about returning `list`; Paratec fetchers parametrize it as `APIDataSource[list]` and `AsyncXMFetcher` as `APIDataSource[pd.DataFrame]`, matching their real return types
+- Refreshed README.md and docs/index.md headers with the new SVG logo, a single tagline, and real shields.io badges; rewrote README body to accurately describe the current implementation (Paratec + XM only) and replaced the Paratec example's `client._http_client.close()` with `async with AsyncParatecClient() as client:`
 - Refactored XM fetchers using DRY principle with BaseXMFetcher abstract base class
 - Updated all type hints to Python 3.10+ syntax (list[T], dict[K,V], X | None)
 - Removed legacy typing imports (Optional, List, Dict, etc.)
