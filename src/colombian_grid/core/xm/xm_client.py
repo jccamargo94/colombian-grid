@@ -10,13 +10,14 @@ from typing import Optional, List
 import pandas as pd
 
 from colombian_grid.core.infra.http.httpx.async_client import AsyncHttpClient
+from colombian_grid.core.base.interfaces.client import AsyncSourceClient
 from colombian_grid.core.base.interfaces.xm.fetchers import (
     AsyncXMFetcher,
     SyncXMFetcher,
 )
 
 
-class AsyncXMClient:
+class AsyncXMClient(AsyncSourceClient):
     """
     Asynchronous client for XM API data access.
 
@@ -45,16 +46,8 @@ class AsyncXMClient:
             timeout: Request timeout in seconds (default: 30.0)
             max_retries: Maximum number of retries for failed requests (default: 3)
         """
-        self._http_client = AsyncHttpClient(timeout=timeout, max_retries=max_retries)
+        super().__init__(timeout=timeout, max_retries=max_retries)
         self._fetcher = AsyncXMFetcher(self._http_client)
-
-    async def __aenter__(self):
-        """Async context manager entry."""
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Async context manager exit."""
-        await self._http_client.close()
 
     async def get_available_metrics(self) -> pd.DataFrame:
         """

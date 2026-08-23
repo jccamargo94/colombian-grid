@@ -412,7 +412,7 @@ class BaseXMFetcher(ABC):
         return pd.concat(results, ignore_index=True)
 
 
-class AsyncXMFetcher(BaseXMFetcher, APIDataSource):
+class AsyncXMFetcher(BaseXMFetcher, APIDataSource[pd.DataFrame]):
     """
     Asynchronous data fetcher for XM API.
 

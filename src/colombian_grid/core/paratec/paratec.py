@@ -1,10 +1,10 @@
 from colombian_grid.core.base.interfaces.paratec.generators import GeneratorFetcher
 from colombian_grid.core.base.interfaces.paratec.transmission import TransmissionFetcher
 from colombian_grid.core.base.interfaces.paratec.hydrology import HydroFetcher
-from colombian_grid.core.infra.http.httpx import AsyncHttpClient
+from colombian_grid.core.base.interfaces.client import AsyncSourceClient
 
 
-class AsyncParatecClient:
+class AsyncParatecClient(AsyncSourceClient):
     """
     AsyncParatecClient is an asynchronous client for fetching data from the Paratec API.
     It provides methods to retrieve generation, substation, and transmission line data.
@@ -22,8 +22,8 @@ class AsyncParatecClient:
         get_hydro_data(): Asynchronously retrieves hydrology data.
     """
 
-    def __init__(self):
-        self._http_client = AsyncHttpClient()
+    def __init__(self, timeout: float = 10.0, max_retries: int = 3):
+        super().__init__(timeout=timeout, max_retries=max_retries)
         self._generator_fetcher = GeneratorFetcher(self._http_client)
         self._transmission_fetcher = TransmissionFetcher(self._http_client)
         self._hydro_fetcher = HydroFetcher(self._http_client)
