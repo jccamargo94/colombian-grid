@@ -1,0 +1,61 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  issue-reference:
+    name: Check Issue Reference
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR body links an issue
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if ! echo "$BODY" | grep -qiE '(closes|fixes|resolves) #[0-9]+'; then
+            echo "::error::PR body must link an issue using 'Closes #N', 'Fixes #N' or 'Resolves #N'"
+            exit 1
+          fi
+
+  issue-approved:
+    name: Check Issue Has status:approved
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate linked issue has status:approved label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          ISSUE="$(echo "$BODY" | grep -oiE '(closes|fixes|resolves) #[0-9]+' | head -n1 | grep -oE '[0-9]+')"
+          if [ -z "$ISSUE" ]; then
+            echo "::error::No linked issue number found in PR body"
+            exit 1
+          fi
+          LABELS="$(gh api "repos/$REPO/issues/$ISSUE/labels" --jq '.[].name')"
+          if ! echo "$LABELS" | grep -qx 'status:approved'; then
+            echo "::error::Issue #$ISSUE does not have the 'status:approved' label"
+            exit 1
+          fi
+
+  type-label:
+    name: Check PR Has type:* Label
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify exactly one type:* label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          COUNT="$(gh api "repos/$REPO/issues/$PR/labels" --jq '[.[].name | select(startswith("type:"))] | length')"
+          if [ "$COUNT" -ne 1 ]; then
+            echo "::error::PR must have exactly one 'type:*' label (found $COUNT)"
+            exit 1
+          fi

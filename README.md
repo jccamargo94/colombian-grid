@@ -1,38 +1,37 @@
 <div align="center">
-  <h1 align="center">Digitizing the Colombian Grid</h1>
-  <h3 align="center">Carry all the information of the Colombian grid with you</h3>
+  <img alt="colombian-grid logo" src="./docs/assets/logo.svg" width="70">
+  <h1>Colombian Grid</h1>
+  <p><i>Consulta, extrae y procesa datos públicos del mercado eléctrico colombiano con Python.</i></p>
 </div>
 
 <div align="center">
-  <!-- PROJECT LOGO -->
-  <br />
-      <img alt="colombian-grid Logo" src="./docs/assets/portrait-logo.png" width="400px">
-  <br />
-  <p><i>The digitization of the Colombian grid in one line</i></p>
+
+[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-070394)](https://jccamargo94.github.io/colombian-grid/)
+
 </div>
 
 ---
 
-✨⚡ Query, extract, and process available information from the Colombian energy market with Python.
+## Acerca del Proyecto
 
-[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue)](https://jccamargo94.github.io/colombian-grid/)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+`colombian-grid` es una librería de Python que ofrece una interfaz simple y asíncrona para acceder y procesar datos públicos del mercado eléctrico colombiano. Actualmente implementa dos fuentes de datos:
 
-## About The Project
+- **[Paratec](https://paratec.xm.com.co/)**: datos de infraestructura — generadores, líneas de transmisión, subestaciones e hidrología.
+- **[XM](https://www.xm.com.co/)**: datos de mercado — generación, demanda, precios y otras métricas, con segmentación automática de rangos de fechas y salida en `DataFrame` de pandas.
 
-`colombian-grid` is a Python library designed to provide a simple and efficient interface to access and process public data from the Colombian electricity market through the Paratec and XM APIs.
+### Características Principales
 
-### Key Features
+- 🔌 **Múltiples Fuentes de Datos**: APIs de Paratec (infraestructura) y XM (datos de mercado)
+- ⚡ **Clientes Asíncronos y Síncronos**: clientes asíncronos para alto rendimiento, más un cliente síncrono de XM para scripts simples
+- 🤖 **Segmentación Automática**: las peticiones a XM dividen automáticamente los rangos de fechas extensos para respetar los límites del API
+- 🔁 **Lógica de Reintentos Integrada**: backoff exponencial con jitter para errores transitorios
+- 📊 **Integración con Pandas**: los datos de XM se devuelven como DataFrames de pandas para facilitar el análisis
+- ✅ **Type Safety**: totalmente tipado (incluye un marcador `py.typed`), con validación opcional de esquemas Pydantic
 
-- 🔌 **Multiple Data Sources**: Access data from both Paratec (infrastructure) and XM (market data) APIs
-- ⚡ **Async & Sync Clients**: Choose between asynchronous clients for high performance or synchronous for simplicity
-- 🤖 **Automatic Chunking**: Handles large date ranges automatically, respecting API restrictions
-- � **Built-in Retry Logic**: Exponential backoff with jitter for handling transient errors
-- 📊 **Pandas Integration**: Returns data as pandas DataFrames for easy analysis
-- ✅ **Type Safety**: Optional Pydantic schema validation for API responses
-
-## Installation
+## Instalación
 
 ### PyPI
 
@@ -40,18 +39,24 @@
 pip install colombian-grid
 ```
 
-## Quick Start
+## Inicio Rápido
 
-### XM API - Market Data
+Importa los clientes desde el paquete raíz:
+
+```python
+from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient
+```
+
+### API de XM - Datos de Mercado
 
 ```python
 import asyncio
 from datetime import date
-from colombian_grid.core.xm import AsyncXMClient
+from colombian_grid import AsyncXMClient
 
 async def main():
     async with AsyncXMClient() as client:
-        # Get system generation data
+        # Obtener datos de generación del sistema
         data = await client.get_data(
             metric="Gene",
             entity="Sistema",
@@ -63,59 +68,66 @@ async def main():
 asyncio.run(main())
 ```
 
-### Paratec API - Infrastructure Data
+`SyncXMClient` ofrece la misma interfaz `get_data(...)` / `get_available_metrics()` para scripts no asíncronos, usando `with SyncXMClient() as client: ...`.
+
+### API de Paratec - Datos de Infraestructura
 
 ```python
 import asyncio
-from colombian_grid.core.paratec import AsyncParatecClient
+from colombian_grid import AsyncParatecClient
 
 async def main():
-    client = AsyncParatecClient()
+    async with AsyncParatecClient() as client:
+        # Obtener datos de generadores
+        generators = await client.get_generation_data()
+        print(f"Se encontraron {len(generators)} generadores")
 
-    # Get generator data
-    generators = await client.get_generation_data()
-    print(f"Found {len(generators)} generators")
-
-    await client._http_client.close()
+        # También disponibles: get_substation_data(), get_transmission_line_data(), get_hydro_data()
 
 asyncio.run(main())
 ```
 
-## Documentation
+Tanto `AsyncParatecClient` como `AsyncXMClient` aceptan los argumentos opcionales `timeout` y `max_retries` en su constructor, y soportan el gestor de contexto `async with`, que cierra automáticamente la conexión HTTP subyacente.
 
-For comprehensive guides, API reference, and examples, visit our [documentation site](https://jccamargo94.github.io/colombian-grid/).
+## Documentación
 
-### Building Documentation Locally
+Para guías completas, referencia del API y ejemplos, visita nuestro [sitio de documentación](https://jccamargo94.github.io/colombian-grid/).
+
+### Construir la Documentación Localmente
 
 ```bash
-# Install documentation dependencies
-uv pip install mkdocs mkdocs-material "mkdocstrings[python]"
+# Instalar dependencias de documentación
+uv pip install mkdocs mkdocs-material "mkdocstrings[python]" mkdocs-static-i18n
 
-# Build and serve documentation
+# Construir y servir la documentación
 uv run mkdocs serve
 ```
 
-The documentation will be available at `http://127.0.0.1:8000`.
+La documentación estará disponible en `http://127.0.0.1:8000`.
 
-## Development
+## Desarrollo
 
-This project uses `uv` for dependency management. To set up a development environment:
+Este proyecto usa `uv` para la gestión de dependencias. Para configurar un entorno de desarrollo:
 
 ```bash
-# Clone the repository
+# Clonar el repositorio
 git clone https://github.com/jccamargo94/colombian-grid.git
 cd colombian-grid
 
-# Install dependencies
+# Instalar dependencias
 uv sync
 
-# Run tests
+# Ejecutar pruebas
 uv run pytest
 
-# Run pre-commit hooks
+# Ejecutar pre-commit hooks
 uv run pre-commit run --all-files
 ```
 
-## Have questions or suggestions?
+## Licencia
 
-Check out our [documentation](https://jccamargo94.github.io/colombian-grid/) or open an issue in our repository. We are here to help you. 😊
+Distribuido bajo la Licencia MIT. Ver [`LICENSE`](LICENSE) para más detalles.
+
+## ¿Tienes dudas o sugerencias?
+
+Consulta nuestra [documentación](https://jccamargo94.github.io/colombian-grid/) o abre un issue en nuestro repositorio. Estamos aquí para ayudarte. 😊

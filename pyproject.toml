@@ -33,6 +33,8 @@ docs = [
     "mkdocs>=1.6.0",
     "mkdocs-material>=9.5.0",
     "mkdocstrings[python]>=0.25.0",
+    "mkdocs-static-i18n>=1.3.1",
+    "mkdocs-autorefs>=1.4.3",
 ]
 
 [build-system]
@@ -40,10 +42,10 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.semantic_release]
-version_toml = "pyproject.toml:project.version"
-branch = "develop"
-changelog_file = "CHANGELOG.md"
+version_toml = ["pyproject.toml:project.version"]
 build_command = "pip install pdm && pdm build"
 dist_path = "dist/"
-upload_to_pypi = true
-upload_to_release = true
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false

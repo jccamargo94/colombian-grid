@@ -1,15 +1,15 @@
 
-# Bienvenido a Colombian Grid
-
-Un paquete de Python para acceder a datos públicos del mercado eléctrico colombiano.
-
-[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
-[![Documentación](https://img.shields.io/badge/docs-mkdocs%20material-blue)](https://jccamargo94.github.io/colombian-grid/)
+<div align="center">
+  <img alt="colombian-grid logo" src="assets/logo.svg" width="70">
+  <h1>Colombian Grid</h1>
+  <p><i>Un paquete de Python para acceder a datos públicos del mercado eléctrico colombiano.</i></p>
+</div>
 
 <div align="center">
-  <br />
-      <img alt="colombian-grid Logo" src="assets/portrait-logo.png" width="400">
-  <br />
+
+[![PyPI](https://img.shields.io/pypi/v/colombian-grid)](https://pypi.org/project/colombian-grid/)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-070394)](https://jccamargo94.github.io/colombian-grid/)
+
 </div>
 
 ---
@@ -24,13 +24,8 @@ Un paquete de Python para acceder a datos públicos del mercado eléctrico colom
 - **Clientes Sincrónicos y Asincrónicos**: Ofrece flexibilidad para integrarse tanto en proyectos asíncronos como en scripts síncronos tradicionales.
 
 ## ¿Cómo empezar?
-Instalar este paquete es muy sencillo. Solo necesitas ejecutar el siguiente comando:
 
-```bash
-pip install colombian-grid
-```
-
-¡Y listo! Ya puedes comenzar a usarlo en tus proyectos.
+Instala el paquete con `pip install colombian-grid` y sigue la guía [Comenzando](getting-started.md) para tu primera consulta a XM o Paratec en pocos minutos.
 
 ## ¿Tienes dudas o sugerencias?
 Consulta nuestra [documentación](https://jccamargo94.github.io/colombian-grid/) o abre un issue en nuestro repositorio. Estamos aquí para ayudarte. 😊

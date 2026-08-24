@@ -11,7 +11,7 @@ from colombian_grid.core.base.interfaces.paratec.utils import (
 )
 
 
-class TransmissionFetcher(APIDataSource):
+class TransmissionFetcher(APIDataSource[list]):
     """This class is responsible for fetching transmission-related data from external APIs.
     It uses an asynchronous HTTP client to make requests to predefined URLs for
     transmission lines and substations. The class provides methods to retrieve and

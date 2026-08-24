@@ -6,6 +6,7 @@ docs_dir: docs
 
 theme:
   name: material
+  favicon: assets/favicon.svg
   features:
     - navigation.tabs
     - navigation.indexes
@@ -21,6 +22,14 @@ theme:
         name: Cambiar a modo claro
 
 plugins:
+  # resolve_closest is required: mkdocs-static-i18n runs one full mkdocs build pass per
+  # locale in the same process, and mkdocs-autorefs shares one global anchor registry
+  # across those passes. Since api-reference.es.md/api-reference.en.md both render the
+  # same Python symbols via mkdocstrings, autorefs sees each symbol anchored twice and
+  # `mkdocs build --strict` fails with "Multiple primary URLs found" unless this is set.
+  # Do not remove this without re-testing `uv run mkdocs build --strict`.
+  - autorefs:
+      resolve_closest: true
   - mkdocstrings:
       handlers:
         python:
@@ -30,8 +39,26 @@ plugins:
             show_root_heading: true
             show_source: true
   - search:
-      lang: es
+      lang: [es, en]
       separator: '[\s\-\.]+'
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: es
+          name: Español
+          default: true
+          build: true
+        - locale: en
+          name: English
+          build: true
+          nav_translations:
+            Inicio: Home
+            Comenzando: Getting Started
+            Referencia API: API Reference
+            Ejemplos: Examples
 
 markdown_extensions:
   - admonition
@@ -43,9 +70,9 @@ markdown_extensions:
 
 nav:
   - Inicio: index.md
-  - Guía Rápida: guia.md
+  - Comenzando: getting-started.md
   - Referencia API: api-reference.md
-  - Ejemplos: ejemplos.md
+  - Ejemplos: examples.md
 
 extra:
   social:

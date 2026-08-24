@@ -8,7 +8,7 @@ from colombian_grid.core.infra.http.httpx.async_client import AsyncHttpClient
 from colombian_grid.core.base.interfaces.paratec.utils import GENERATOR_DATA_URL
 
 
-class GeneratorFetcher(APIDataSource):
+class GeneratorFetcher(APIDataSource[list]):
     """
     A data source class for retrieving generator data from multiple API endpoints.
     This class extends APIDataSource and is designed to fetch and combine data

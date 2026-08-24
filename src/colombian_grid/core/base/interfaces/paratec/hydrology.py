@@ -8,7 +8,7 @@ from colombian_grid.core.infra.http.httpx.async_client import AsyncHttpClient
 from colombian_grid.core.base.interfaces.paratec.utils import HYDROLOGY_URL
 
 
-class HydroFetcher(APIDataSource):
+class HydroFetcher(APIDataSource[list]):
     """
     HydroFetcher is a class that fetches hydrological data from a specified URL using an asynchronous HTTP client.
     It inherits from APIDataSource and provides methods to retrieve and process the data.
