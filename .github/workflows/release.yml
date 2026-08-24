@@ -39,11 +39,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # main is fully protected (no actor may update it directly), so
-          # semantic-release commits + tags locally and we publish only the
-          # tag ref plus the GitHub Release. Tags are outside branch
-          # protection; the bumped pyproject/CHANGELOG travel inside the tag.
-          pdm run semantic-release version --no-push
+          # main is fully protected (no actor may update it directly), so we
+          # never create a release commit: PSR tags the real merge commit on
+          # HEAD and we publish only the tag ref plus the GitHub Release.
+          # Tags are outside branch protection. --no-commit/--no-changelog are
+          # essential: a synthetic bump commit would live outside main's DAG,
+          # making the tag unreachable and breaking future version math.
+          pdm run semantic-release version --no-push --no-commit --no-changelog
           TAG="$(git tag --points-at HEAD | head -n1)"
           if [ -n "$TAG" ]; then
             git push origin "refs/tags/${TAG}"
