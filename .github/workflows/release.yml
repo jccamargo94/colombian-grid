@@ -53,6 +53,21 @@ jobs:
           fi
           echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
 
+      # Build AFTER semantic-release applied its in-tree version edit, and pass
+      # the artifacts to publish-pypi via workflow artifact. Rebuilding from the
+      # tagged tree would ship a wheel versioned from stale committed metadata,
+      # because --no-commit means the version edit never lands in any commit.
+      - name: Build distributions
+        if: steps.release.outputs.tag != ''
+        run: pdm build
+
+      - name: Upload distribution artifacts
+        if: steps.release.outputs.tag != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
   publish-pypi:
     needs: release
     # Skips on pushes that produced no release (no new tag)
@@ -63,20 +78,11 @@ jobs:
     permissions:
       id-token: write # Required for PyPI Trusted Publishing (OIDC)
     steps:
-      - name: Checkout released tag
-        uses: actions/checkout@v4
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
         with:
-          ref: ${{ needs.release.outputs.tag }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Build distributions
-        run: |
-          pip install pdm
-          pdm build
+          name: dist
+          path: dist/
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
