@@ -8,14 +8,16 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -30,7 +32,36 @@ jobs:
           git config --global user.email "semantic-release@users.noreply.github.com"
 
       - name: Run semantic-release
+        id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: pdm run semantic-release publish
+        run: |
+          pdm run semantic-release publish
+          TAG="$(git tag --points-at HEAD | head -n1)"
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+
+  publish-pypi:
+    needs: release
+    # Skips on pushes that produced no release (no new tag)
+    if: needs.release.outputs.tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for PyPI Trusted Publishing (OIDC)
+    steps:
+      - name: Checkout released tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build distributions
+        run: |
+          pip install pdm
+          pdm build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
