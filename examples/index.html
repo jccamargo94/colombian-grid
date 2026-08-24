@@ -8,8 +8,10 @@
       
       
       
-        <link rel="canonical" href="https://jccamargo94.github.io/colombian-grid/CONTRIBUTING_DOCS/">
+        <link rel="canonical" href="https://jccamargo94.github.io/colombian-grid/examples/">
       
+      
+        <link rel="prev" href="../api-reference/">
       
       
       
@@ -18,7 +20,7 @@
     
     
       
-        <title>Contributing to Documentation - colombian-grid</title>
+        <title>Ejemplos - colombian-grid</title>
       
     
     
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#contributing-to-documentation" class="md-skip">
+        <a href="#ejemplos-de-uso" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -106,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing to Documentation
+              Ejemplos
             
           </span>
         </div>
@@ -159,7 +161,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../en/CONTRIBUTING_DOCS/" hreflang="en" class="md-select__link">
+            <a href="../en/examples/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -298,9 +300,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../examples/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -428,10 +432,32 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../examples/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Ejemplos
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -442,6 +468,110 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#api-de-xm" class="md-nav__link">
+    <span class="md-ellipsis">
+      API de XM
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API de XM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-1-obtener-metricas-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 1: Obtener Métricas Disponibles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-2-consultar-generacion-por-recurso-con-filtros" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 2: Consultar Generación por Recurso con Filtros
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-3-consulta-sincrona-de-precios-de-bolsa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 3: Consulta Síncrona de Precios de Bolsa
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-de-paratec" class="md-nav__link">
+    <span class="md-ellipsis">
+      API de Paratec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API de Paratec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-4-datos-de-generadores-e-hidrologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 4: Datos de Generadores e Hidrología
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-5-datos-de-subestaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 5: Datos de Subestaciones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-6-datos-de-lineas-de-transmision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejemplo 6: Datos de Líneas de Transmisión
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -473,55 +603,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#documentation-structure" class="md-nav__link">
+  <a href="#api-de-xm" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentation Structure
+      API de XM
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#building-documentation-locally" class="md-nav__link">
-    <span class="md-ellipsis">
-      Building Documentation Locally
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Building Documentation Locally">
+    <nav class="md-nav" aria-label="API de XM">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#ejemplo-1-obtener-metricas-disponibles" class="md-nav__link">
     <span class="md-ellipsis">
-      Prerequisites
+      Ejemplo 1: Obtener Métricas Disponibles
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#build-the-documentation" class="md-nav__link">
+  <a href="#ejemplo-2-consultar-generacion-por-recurso-con-filtros" class="md-nav__link">
     <span class="md-ellipsis">
-      Build the Documentation
+      Ejemplo 2: Consultar Generación por Recurso con Filtros
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#serve-the-documentation-locally" class="md-nav__link">
+  <a href="#ejemplo-3-consulta-sincrona-de-precios-de-bolsa" class="md-nav__link">
     <span class="md-ellipsis">
-      Serve the Documentation Locally
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#strict-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Strict Mode
+      Ejemplo 3: Consulta Síncrona de Precios de Bolsa
     </span>
   </a>
   
@@ -533,37 +645,37 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation-guidelines" class="md-nav__link">
+  <a href="#api-de-paratec" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentation Guidelines
+      API de Paratec
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Documentation Guidelines">
+    <nav class="md-nav" aria-label="API de Paratec">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#writing-guidelines" class="md-nav__link">
+  <a href="#ejemplo-4-datos-de-generadores-e-hidrologia" class="md-nav__link">
     <span class="md-ellipsis">
-      Writing Guidelines
+      Ejemplo 4: Datos de Generadores e Hidrología
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#api-reference" class="md-nav__link">
+  <a href="#ejemplo-5-datos-de-subestaciones" class="md-nav__link">
     <span class="md-ellipsis">
-      API Reference
+      Ejemplo 5: Datos de Subestaciones
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#adding-new-pages" class="md-nav__link">
+  <a href="#ejemplo-6-datos-de-lineas-de-transmision" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding New Pages
+      Ejemplo 6: Datos de Líneas de Transmisión
     </span>
   </a>
   
@@ -571,90 +683,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#continuous-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Continuous Integration
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Continuous Integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#on-pull-requests" class="md-nav__link">
-    <span class="md-ellipsis">
-      On Pull Requests
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#on-push-to-main" class="md-nav__link">
-    <span class="md-ellipsis">
-      On Push to Main
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#warning-no-type-or-annotation-for-returned-value" class="md-nav__link">
-    <span class="md-ellipsis">
-      Warning: No type or annotation for returned value
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation-not-updating" class="md-nav__link">
-    <span class="md-ellipsis">
-      Documentation not updating
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#missing-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      Missing dependencies
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resources
-    </span>
-  </a>
   
 </li>
       
@@ -677,108 +705,104 @@
   
 
 
-<h1 id="contributing-to-documentation">Contributing to Documentation</h1>
-<p>This guide explains how to work with the documentation for <code>colombian-grid</code>.</p>
-<h2 id="documentation-structure">Documentation Structure</h2>
-<p>The documentation is built using <a href="https://www.mkdocs.org/">MkDocs</a> with the <a href="https://squidfunk.github.io/mkdocs-material/">Material theme</a>.</p>
-<div class="highlight"><pre><span></span><code>colombian-grid/
-├── mkdocs.yml          # MkDocs configuration
-├── docs/               # Documentation source files
-│   ├── index.md        # Home page
-│   ├── guia.md         # Quick Start Guide
-│   ├── api-reference.md # API Reference (auto-generated)
-│   ├── ejemplos.md     # Usage Examples
-│   └── assets/         # Images and other assets
-└── site/               # Generated documentation (not committed)
-</code></pre></div>
-<h2 id="building-documentation-locally">Building Documentation Locally</h2>
-<h3 id="prerequisites">Prerequisites</h3>
-<p>Install documentation dependencies using <code>uv</code>:</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--group<span class="w"> </span>docs
-</code></pre></div>
-<h3 id="build-the-documentation">Build the Documentation</h3>
-<p>To build the documentation once:</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build
-</code></pre></div>
-<p>This generates the static site in the <code>site/</code> directory.</p>
-<h3 id="serve-the-documentation-locally">Serve the Documentation Locally</h3>
-<p>To serve the documentation with live reloading:</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>serve
-</code></pre></div>
-<p>Then open your browser to <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>.</p>
-<h3 id="strict-mode">Strict Mode</h3>
-<p>To build with warnings treated as errors (recommended before committing):</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
-</code></pre></div>
-<h2 id="documentation-guidelines">Documentation Guidelines</h2>
-<h3 id="writing-guidelines">Writing Guidelines</h3>
-<ol>
-<li><strong>Language</strong>: Write documentation in Spanish as the primary audience is Colombian energy market participants.</li>
-<li><strong>Code Examples</strong>: Always include working code examples that can be copy-pasted.</li>
-<li><strong>Type Hints</strong>: Ensure all public API methods have proper return type annotations for auto-generated documentation.</li>
-<li><strong>Docstrings</strong>: Use Google-style docstrings for all public classes and methods.</li>
-</ol>
-<h3 id="api-reference">API Reference</h3>
-<p>The API reference is automatically generated from docstrings using <code>mkdocstrings</code>. To add a new class to the API reference:</p>
-<ol>
-<li>Add proper docstrings to your class/methods</li>
-<li>Update <code>docs/api-reference.md</code> with the mkdocstrings directive:</li>
-</ol>
-<div class="highlight"><pre><span></span><code>::: colombian_grid.module.ClassName
-    handler: python
-    options:
-      members:
-<span class="w">        </span><span class="k">-</span><span class="w"> </span>method1
-<span class="w">        </span><span class="k">-</span><span class="w"> </span>method2
-</code></pre></div>
-<h3 id="adding-new-pages">Adding New Pages</h3>
-<ol>
-<li>Create a new <code>.md</code> file in the <code>docs/</code> directory</li>
-<li>Add it to the navigation in <code>mkdocs.yml</code>:</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="nt">nav</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Inicio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.md</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Your New Page</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-page.md</span>
-</code></pre></div>
-<h2 id="continuous-integration">Continuous Integration</h2>
-<p>Documentation is automatically built and deployed via GitHub Actions:</p>
-<h3 id="on-pull-requests">On Pull Requests</h3>
-<ul>
-<li>Documentation is built in strict mode to catch errors</li>
-<li>Build artifacts are uploaded for review</li>
-<li>Any warnings will cause the build to fail</li>
-</ul>
-<h3 id="on-push-to-main">On Push to Main</h3>
-<ul>
-<li>Documentation is built and deployed to GitHub Pages</li>
-<li>Available at: https://jccamargo94.github.io/colombian-grid/</li>
-</ul>
-<h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="warning-no-type-or-annotation-for-returned-value">Warning: No type or annotation for returned value</h3>
-<p>This warning occurs when a method doesn't have a return type annotation. Fix by adding type hints:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Before</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<h1 id="ejemplos-de-uso">Ejemplos de Uso</h1>
+<p>Aquí encontrarás ejemplos prácticos de cómo utilizar <code>colombian-grid</code> para diferentes casos de uso.</p>
+<h2 id="api-de-xm">API de XM</h2>
+<h3 id="ejemplo-1-obtener-metricas-disponibles">Ejemplo 1: Obtener Métricas Disponibles</h3>
+<p>Antes de solicitar datos, puedes consultar todas las métricas que ofrece el API de XM.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncXMClient</span>
 
-<span class="c1"># After</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetcher</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncXMClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_available_metrics</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Métricas disponibles en el API de XM:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="p">[[</span><span class="s2">&quot;MetricId&quot;</span><span class="p">,</span> <span class="s2">&quot;MetricName&quot;</span><span class="p">,</span> <span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="s2">&quot;MaxDays&quot;</span><span class="p">]])</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
-<h3 id="documentation-not-updating">Documentation not updating</h3>
-<ol>
-<li>Clear the site directory: <code>rm -rf site/</code></li>
-<li>Rebuild: <code>uv run mkdocs build</code></li>
-</ol>
-<h3 id="missing-dependencies">Missing dependencies</h3>
-<p>Ensure all documentation dependencies are installed:</p>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>sync<span class="w"> </span>--group<span class="w"> </span>docs
+<h3 id="ejemplo-2-consultar-generacion-por-recurso-con-filtros">Ejemplo 2: Consultar Generación por Recurso con Filtros</h3>
+<p>Puedes filtrar los datos por códigos de recursos específicos (por ejemplo, plantas de generación).</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncXMClient</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncXMClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="c1"># Consultar generación para las plantas GUAJIRA1 y GUAJIRA2</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;Gene&quot;</span><span class="p">,</span>
+            <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;Recurso&quot;</span><span class="p">,</span>
+            <span class="n">start_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">end_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+            <span class="n">filter_by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GUAJIRA1&quot;</span><span class="p">,</span> <span class="s2">&quot;GUAJIRA2&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generación para GUAJIRA1 y GUAJIRA2:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
-<h2 id="resources">Resources</h2>
-<ul>
-<li><a href="https://www.mkdocs.org/">MkDocs Documentation</a></li>
-<li><a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a></li>
-<li><a href="https://mkdocstrings.github.io/">mkdocstrings</a></li>
-</ul>
+<h3 id="ejemplo-3-consulta-sincrona-de-precios-de-bolsa">Ejemplo 3: Consulta Síncrona de Precios de Bolsa</h3>
+<p>Si prefieres un enfoque síncrono, puedes usar <code>SyncXMClient</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyncXMClient</span>
+
+<span class="k">with</span> <span class="n">SyncXMClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">precio_bolsa</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;PrecBolsNaci&quot;</span><span class="p">,</span>
+        <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;Sistema&quot;</span><span class="p">,</span>
+        <span class="n">start_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">end_date</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Precio de Bolsa Nacional (primeros 10 días de Enero 2024):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">precio_bolsa</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="api-de-paratec">API de Paratec</h2>
+<h3 id="ejemplo-4-datos-de-generadores-e-hidrologia">Ejemplo 4: Datos de Generadores e Hidrología</h3>
+<p>Consulta datos sobre generadores y registros hidrológicos.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncParatecClient</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncParatecClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">generadores</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_generation_data</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total de generadores: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">generadores</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">hidrologia</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_hydro_data</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Registros de hidrología: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hidrologia</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<h3 id="ejemplo-5-datos-de-subestaciones">Ejemplo 5: Datos de Subestaciones</h3>
+<p>Consulta el listado de subestaciones registradas en Paratec.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncParatecClient</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncParatecClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">subestaciones</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_substation_data</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total de subestaciones: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">subestaciones</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">subestaciones</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<h3 id="ejemplo-6-datos-de-lineas-de-transmision">Ejemplo 6: Datos de Líneas de Transmisión</h3>
+<p>Consulta el listado de líneas de transmisión.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colombian_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncParatecClient</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncParatecClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">lineas</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_transmission_line_data</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total de líneas de transmisión: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lineas</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">lineas</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Todos los métodos de <code>AsyncParatecClient</code> (<code>get_generation_data</code>, <code>get_substation_data</code>, <code>get_transmission_line_data</code>, <code>get_hydro_data</code>) se pueden llamar dentro del mismo bloque <code>async with</code>, reutilizando la misma conexión HTTP.</p>
+</div>
 
 
 

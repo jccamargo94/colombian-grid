@@ -1,23 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-         <loc>https://jccamargo94.github.io/colombian-grid/</loc>
-         <lastmod>2025-10-01</lastmod>
+        <loc>https://jccamargo94.github.io/colombian-grid/CONTRIBUTING_DOCS/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/CONTRIBUTING_DOCS/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/CONTRIBUTING_DOCS/"/>
     </url>
     <url>
-         <loc>https://jccamargo94.github.io/colombian-grid/CONTRIBUTING_DOCS/</loc>
-         <lastmod>2025-10-01</lastmod>
+        <loc>https://jccamargo94.github.io/colombian-grid/api-reference/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/api-reference/"/>
     </url>
     <url>
-         <loc>https://jccamargo94.github.io/colombian-grid/api-reference/</loc>
-         <lastmod>2025-10-01</lastmod>
+        <loc>https://jccamargo94.github.io/colombian-grid/examples/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/examples/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/examples/"/>
     </url>
     <url>
-         <loc>https://jccamargo94.github.io/colombian-grid/ejemplos/</loc>
-         <lastmod>2025-10-01</lastmod>
+        <loc>https://jccamargo94.github.io/colombian-grid/getting-started/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/getting-started/"/>
     </url>
     <url>
-         <loc>https://jccamargo94.github.io/colombian-grid/guia/</loc>
-         <lastmod>2025-10-01</lastmod>
+        <loc>https://jccamargo94.github.io/colombian-grid/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/"/>
+    </url>
+    <url>
+        <loc>https://jccamargo94.github.io/colombian-grid/en/CONTRIBUTING_DOCS/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/CONTRIBUTING_DOCS/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/CONTRIBUTING_DOCS/"/>
+    </url>
+    <url>
+        <loc>https://jccamargo94.github.io/colombian-grid/en/api-reference/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/api-reference/"/>
+    </url>
+    <url>
+        <loc>https://jccamargo94.github.io/colombian-grid/en/examples/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/examples/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/examples/"/>
+    </url>
+    <url>
+        <loc>https://jccamargo94.github.io/colombian-grid/en/getting-started/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://jccamargo94.github.io/colombian-grid/en/</loc>
+        <lastmod>2026-08-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://jccamargo94.github.io/colombian-grid/en/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://jccamargo94.github.io/colombian-grid/"/>
     </url>
 </urlset>
