@@ -1,10 +1,11 @@
 name: Build and Deploy Documentation
 
 on:
+  # Deployments happen only from main; develop needs only pull_request builds,
+  # otherwise every develop push races itself in the same Pages pipeline.
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
@@ -17,7 +18,7 @@ permissions:
 
 # Concurrency guard: a newer docs build always supersedes an in-flight one.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
