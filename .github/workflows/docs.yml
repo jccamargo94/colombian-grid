@@ -23,9 +23,8 @@ concurrency:
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # No explicit environment here: the github-pages environment is restricted
+    # to main, so declaring it would break pull_request runs of this workflow.
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
