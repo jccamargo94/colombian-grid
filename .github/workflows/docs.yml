@@ -1,21 +1,31 @@
 name: Build and Deploy Documentation
 
 on:
+  # Deployments happen only from main; develop needs only pull_request builds,
+  # otherwise every develop push races itself in the same Pages pipeline.
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
       - develop
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+# Concurrency guard: a newer docs build always supersedes an in-flight one.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-docs:
     runs-on: ubuntu-latest
+    # No explicit environment here: the github-pages environment is restricted
+    # to main, so declaring it would break pull_request runs of this workflow.
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,6 +48,10 @@ jobs:
         run: |
           uv run mkdocs build --strict
 
+      - name: Configure Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
+
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -45,11 +59,13 @@ jobs:
           path: site/
           retention-days: 7
 
-      - name: Deploy to GitHub Pages
+      - name: Upload Pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/deploy-pages@v4
