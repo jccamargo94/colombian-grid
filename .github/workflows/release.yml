@@ -43,7 +43,7 @@ jobs:
           # semantic-release commits + tags locally and we publish only the
           # tag ref plus the GitHub Release. Tags are outside branch
           # protection; the bumped pyproject/CHANGELOG travel inside the tag.
-          pdm run semantic-release version
+          pdm run semantic-release version --no-push
           TAG="$(git tag --points-at HEAD | head -n1)"
           if [ -n "$TAG" ]; then
             git push origin "refs/tags/${TAG}"
