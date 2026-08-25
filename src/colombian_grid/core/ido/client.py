@@ -184,7 +184,9 @@ class AsyncIdoClient(AsyncSourceClient):
         """Resolve optional user input to an ISO date string."""
         return _to_iso_date(fecha) if fecha is not None else _default_fecha()
 
-    async def generacion(self, fecha=None) -> pd.DataFrame:
+    async def generacion(
+        self, fecha: date | datetime | str | None = None
+    ) -> pd.DataFrame:
         """Fetch the daily generation archive for ``fecha``.
 
         Flattens the nested upstream payload into one row per resource
@@ -258,7 +260,9 @@ class AsyncIdoClient(AsyncSourceClient):
         ]
         return frame[leading + [c for c in frame.columns if c not in leading]]
 
-    async def intercambios(self, fecha=None) -> pd.DataFrame:
+    async def intercambios(
+        self, fecha: date | datetime | str | None = None
+    ) -> pd.DataFrame:
         """Fetch the daily international exchanges archive for ``fecha``.
 
         The upstream payload nests one country-level list per direction;
@@ -306,7 +310,9 @@ class AsyncIdoClient(AsyncSourceClient):
         frame.attrs["totales"] = totales
         return frame
 
-    async def disponibilidad(self, fecha=None) -> pd.DataFrame:
+    async def disponibilidad(
+        self, fecha: date | datetime | str | None = None
+    ) -> pd.DataFrame:
         """Fetch the daily availability archive for ``fecha``.
 
         Each availability category (``tipogen``) carries a nested resource
@@ -364,7 +370,7 @@ class AsyncIdoClient(AsyncSourceClient):
             ],
         )
 
-    async def costos(self, fecha=None) -> pd.DataFrame:
+    async def costos(self, fecha: date | datetime | str | None = None) -> pd.DataFrame:
         """Fetch the daily costs archive for ``fecha``.
 
         Args:
@@ -400,8 +406,8 @@ class AsyncIdoClient(AsyncSourceClient):
             - ``generacion``: dispatched generation in kWh.
             - ``agc``: AGC (automatic generation control) value.
             - ``color``: status letter from the visualization (or null).
-            - ``categoria``: human-readable meaning of the color letter;
-              None when the color is null or unknown.
+            - ``categoria``: human-readable meaning of the color letter
+                  (``None`` when the color is null or unknown).
 
             Report metadata is exposed via ``df.attrs["globales"]``
             (e.g. ``codigo``, ``descripcion``, ``version``).
