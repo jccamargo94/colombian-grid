@@ -122,3 +122,97 @@ asyncio.run(main())
 
 !!! tip
     Todos los métodos de `AsyncParatecClient` (`get_generation_data`, `get_substation_data`, `get_transmission_line_data`, `get_hydro_data`) se pueden llamar dentro del mismo bloque `async with`, reutilizando la misma conexión HTTP.
+
+## API de IDO
+
+### Ejemplo 7: Generación del Día Anterior
+
+El archivo diario de generación del Informe Diario de Operación (IDO). Sin argumentos devuelve el día anterior en hora de Colombia; también acepta `datetime.date`, `datetime.datetime` o un string ISO.
+
+```python
+import asyncio
+from datetime import date
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        # Ayer en hora de Colombia (los datos se publican ~06:05 COT)
+        ayer = await client.generacion()
+        print(ayer.head())
+
+        # O una fecha concreta
+        especifica = await client.generacion(date(2026, 7, 15))
+        print(especifica[["fecha", "tipo_generacion", "nombrerecurso", "gendesp"]].head())
+
+asyncio.run(main())
+```
+
+Cada fila es una observación por recurso (`nombrerecurso`) y tipo de generación (`tipo_generacion`), con las columnas `gendesp`, `genened` y `genprodesp`. Los subtotales se excluyen a propósito para evitar dobles conteos.
+
+### Ejemplo 8: Intercambios Internacionales con Totales
+
+Los intercambios internacionales con países vecinos llegan en formato largo, con una fila por país y dirección. Estos datos no están disponibles a través del API pública de XM.
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        intercambios = await client.intercambios()
+        print(intercambios[["direccion", "pais", "programada", "real"]])
+
+        # Totales por dirección ("exportaciones" / "importaciones")
+        totales = intercambios.attrs["totales"]
+        print(totales["exportaciones"])
+
+asyncio.run(main())
+```
+
+La columna `direccion` distingue entre `"exportaciones"` e `"importaciones"`; los totales de cada dirección viajan en `df.attrs["totales"]`.
+
+### Ejemplo 9: Disponibilidad por Recurso
+
+La disponibilidad declara, por categoría de generación (`tipogen`), la capacidad efectiva y la disponibilidad de cada recurso.
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        disponibilidad = await client.disponibilidad()
+
+        # Los subtotales se repiten en cada fila de su categoría;
+        # tómalos una vez por categoría:
+        print(
+            disponibilidad.groupby("tipogen")[
+                ["subtotal", "subtotal_capefectiva"]
+            ].first()
+        )
+
+asyncio.run(main())
+```
+
+Además de `subtotal` y `subtotal_capefectiva`, cada fila trae `capacidadefectiva`, `disponibilidad` y `porcentaje`.
+
+### Ejemplo 10: Despacho Coordinado del Día
+
+`despacho_recurso()` devuelve el programa de despacho coordinado del día en curso, en 24 periodos horarios. Ojo: el endpoint es lento y puede tardar cerca de un minuto en responder — ten paciencia. No recibe fecha porque el servicio siempre devuelve el día actual.
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        despacho = await client.despacho_recurso()
+        print(despacho[["recurso", "periodo", "generacion", "color", "categoria"]].head())
+
+        # Metadatos del reporte (codigo, descripcion, version)
+        print(despacho.attrs["globales"])
+
+asyncio.run(main())
+```
+
+La columna `color` replica la letra de estado del tablero oficial del IDO (R, V, C, Y, P, N, A, M) y `categoria` traduce esa letra a su significado legible (por ejemplo, `"Racionamientos programados en Subárea"`); vale `None` cuando el color es nulo o desconocido.

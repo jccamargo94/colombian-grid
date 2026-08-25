@@ -1,6 +1,6 @@
 # Comenzando
 
-`colombian-grid` te permite consultar datos públicos del mercado eléctrico colombiano (Paratec y XM) desde Python, sin tener que lidiar directamente con las APIs REST subyacentes.
+`colombian-grid` te permite consultar datos públicos del mercado eléctrico colombiano (Paratec, XM e IDO) desde Python, sin tener que lidiar directamente con las APIs REST subyacentes.
 
 ## Instalación
 
@@ -21,7 +21,7 @@ uv add colombian-grid
 Todos los clientes se pueden importar directamente desde el paquete raíz:
 
 ```python
-from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient
+from colombian_grid import AsyncIdoClient, AsyncParatecClient, AsyncXMClient, SyncXMClient
 ```
 
 ## API de XM — datos de mercado
@@ -88,6 +88,30 @@ asyncio.run(main())
 ```
 
 `AsyncParatecClient` implementa `async with`, así que la conexión HTTP subyacente se cierra automáticamente al salir del bloque — no necesitas cerrarla manualmente.
+
+## API de IDO — Informe Diario de Operación
+
+El [Informe Diario de Operación (IDO)](https://ido.xm.com.co/) de XM resume la operación diaria del sistema: generación, intercambios internacionales, disponibilidad, costos y despacho coordinado. Solo tiene cliente asíncrono (`AsyncIdoClient`). Por defecto las consultas devuelven el día anterior en hora de Colombia, ya que el IDO publica los datos del día previo alrededor de las 06:05 (hora colombiana), con correcciones que llegan como nuevas versiones (V1, V2...).
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        generacion = await client.generacion()      # ayer (hora Colombia)
+        despacho = await client.despacho_recurso()  # despacho del día en curso
+        print(f"Registros de generación: {len(generacion)}")
+
+asyncio.run(main())
+```
+
+Ten en cuenta:
+
+- El servidor `ido.xm.com.co` sirve una cadena de certificados TLS incompleta (una configuración errónea conocida del proveedor), por lo que la verificación TLS estándar falla. Si lo necesitas, pasa `tls_verify=False` al constructor como solución explícita y deliberada; preferimos que mantengas la verificación activa y reportes el problema a XM.
+- `despacho_recurso()` no acepta fecha: el servicio ignora cualquier parámetro de fecha y siempre devuelve el despacho coordinado del día actual. Además es un endpoint lento (puede tardar cerca de un minuto); el cliente ya aplica internamente un timeout mayor para él.
+
+`AsyncIdoClient` también implementa `async with`, así que la conexión HTTP subyacente se cierra automáticamente al salir del bloque.
 
 ## Próximos pasos
 

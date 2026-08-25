@@ -14,10 +14,10 @@
 
 ---
 
-`colombian-grid` is a Python library designed to make it easy to access public data from the Colombian electricity market, consuming the Paratec and XM APIs directly. The library offers an async-first interface to query generator, transmission infrastructure, hydrology, and market data.
+`colombian-grid` is a Python library designed to make it easy to access public data from the Colombian electricity market, consuming the Paratec and XM APIs directly (including XM's Daily Operation Report, IDO). The library offers an async-first interface to query generator, transmission infrastructure, hydrology, market data, and the system's daily operation.
 
 ## Key Features
-- **Multiple Data Sources**: Access data from Paratec and XM, two of the main sources of information in the Colombian energy market.
+- **Multiple Data Sources**: Access data from Paratec, XM, and IDO (XM's Daily Operation Report), three key sources of information in the Colombian energy market.
 - **Async Interface**: Built with `asyncio` and `httpx` for non-blocking, high-performance I/O.
 - **Data Validation**: Uses `Pydantic` to validate the structure and types of API responses (optional).
 - **Automatic Chunking**: For large date ranges, the library automatically splits requests to respect XM's API limits.
@@ -25,7 +25,7 @@
 
 ## Getting started
 
-Install the package with `pip install colombian-grid` and follow the [Getting Started](getting-started.md) guide to run your first XM or Paratec query in a few minutes.
+Install the package with `pip install colombian-grid` and follow the [Getting Started](getting-started.md) guide to run your first XM, Paratec, or IDO query in a few minutes.
 
 ## Questions or suggestions?
 Check out our [documentation](https://jccamargo94.github.io/colombian-grid/) or open an issue in our repository. We're here to help. 😊

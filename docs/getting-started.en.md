@@ -1,6 +1,6 @@
 # Getting Started
 
-`colombian-grid` lets you query public data from the Colombian electricity market (Paratec and XM) from Python, without dealing with the underlying REST APIs directly.
+`colombian-grid` lets you query public data from the Colombian electricity market (Paratec, XM, and IDO) from Python, without dealing with the underlying REST APIs directly.
 
 ## Installation
 
@@ -21,7 +21,7 @@ uv add colombian-grid
 All clients can be imported directly from the top-level package:
 
 ```python
-from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient
+from colombian_grid import AsyncIdoClient, AsyncParatecClient, AsyncXMClient, SyncXMClient
 ```
 
 ## XM API — market data
@@ -88,6 +88,30 @@ asyncio.run(main())
 ```
 
 `AsyncParatecClient` implements `async with`, so the underlying HTTP connection closes automatically when the block exits — you don't need to close it manually.
+
+## IDO API — Daily Operation Report
+
+XM's [Daily Operation Report (IDO)](https://ido.xm.com.co/) summarizes the system's daily operation: generation, international exchanges, availability, costs, and coordinated dispatch. It only has an async client (`AsyncIdoClient`). By default, queries return yesterday in Colombia time, because IDO publishes previous-day data around 06:05 (Colombia time), with corrections delivered as new versions (V1, V2...).
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        generation = await client.generacion()       # yesterday (Colombia time)
+        dispatch = await client.despacho_recurso()   # current day's dispatch
+        print(f"Generation records: {len(generation)}")
+
+asyncio.run(main())
+```
+
+Keep in mind:
+
+- The `ido.xm.com.co` server serves an incomplete TLS certificate chain (a known upstream misconfiguration), so standard verification fails. If needed, pass `tls_verify=False` to the constructor as an explicit, deliberate workaround; we'd rather you keep verification enabled and report the issue to XM.
+- `despacho_recurso()` takes no date: the service ignores any date parameter and always returns the current day's coordinated dispatch. It is also a slow endpoint (it can take around a minute); the client already applies a longer internal timeout for it.
+
+`AsyncIdoClient` also implements `async with`, so the underlying HTTP connection closes automatically when the block exits.
 
 ## Next steps
 

@@ -31,3 +31,16 @@ Esta sección contiene la referencia técnica de las clases y métodos principal
         - get_substation_data
         - get_transmission_line_data
         - get_hydro_data
+
+## Módulo `colombian_grid.core.ido`
+
+::: colombian_grid.core.ido.AsyncIdoClient
+    handler: python
+    options:
+      members:
+        - __init__
+        - generacion
+        - intercambios
+        - disponibilidad
+        - costos
+        - despacho_recurso
