@@ -17,14 +17,15 @@
 
 ## Acerca del Proyecto
 
-`colombian-grid` es una librería de Python que ofrece una interfaz simple y asíncrona para acceder y procesar datos públicos del mercado eléctrico colombiano. Actualmente implementa dos fuentes de datos:
+`colombian-grid` es una librería de Python que ofrece una interfaz simple y asíncrona para acceder y procesar datos públicos del mercado eléctrico colombiano. Actualmente implementa tres fuentes de datos:
 
 - **[Paratec](https://paratec.xm.com.co/)**: datos de infraestructura — generadores, líneas de transmisión, subestaciones e hidrología.
 - **[XM](https://www.xm.com.co/)**: datos de mercado — generación, demanda, precios y otras métricas, con segmentación automática de rangos de fechas y salida en `DataFrame` de pandas.
+- **[XM IDO](https://ido.xm.com.co/) (Informe Diario de Operación)**: el reporte diario de la operación del sistema — generación, intercambios internacionales, disponibilidad, costos y despacho coordinado. Estos datos no están disponibles a través del API pública de XM.
 
 ### Características Principales
 
-- 🔌 **Múltiples Fuentes de Datos**: APIs de Paratec (infraestructura) y XM (datos de mercado)
+- 🔌 **Múltiples Fuentes de Datos**: APIs de Paratec (infraestructura), XM (datos de mercado) e IDO (Informe Diario de Operación)
 - ⚡ **Clientes Asíncronos y Síncronos**: clientes asíncronos para alto rendimiento, más un cliente síncrono de XM para scripts simples
 - 🤖 **Segmentación Automática**: las peticiones a XM dividen automáticamente los rangos de fechas extensos para respetar los límites del API
 - 🔁 **Lógica de Reintentos Integrada**: backoff exponencial con jitter para errores transitorios
@@ -44,7 +45,7 @@ pip install colombian-grid
 Importa los clientes desde el paquete raíz:
 
 ```python
-from colombian_grid import AsyncParatecClient, AsyncXMClient, SyncXMClient
+from colombian_grid import AsyncIdoClient, AsyncParatecClient, AsyncXMClient, SyncXMClient
 ```
 
 ### API de XM - Datos de Mercado
@@ -87,7 +88,37 @@ async def main():
 asyncio.run(main())
 ```
 
-Tanto `AsyncParatecClient` como `AsyncXMClient` aceptan los argumentos opcionales `timeout` y `max_retries` en su constructor, y soportan el gestor de contexto `async with`, que cierra automáticamente la conexión HTTP subyacente.
+### API de IDO - Informe Diario de Operación
+
+El [Informe Diario de Operación (IDO)](https://ido.xm.com.co/) de XM resume cada día la operación del sistema: generación, intercambios internacionales, disponibilidad, costos y despacho coordinado. Estos datos no están disponibles a través del API pública de XM, así que el cliente los obtiene directamente de la fuente.
+
+```python
+import asyncio
+from colombian_grid import AsyncIdoClient
+
+async def main():
+    async with AsyncIdoClient() as client:
+        # Archivo diario de generación (por defecto, ayer en hora de Colombia;
+        # el IDO publica los datos del día previo alrededor de las 06:05 COT)
+        generacion = await client.generacion()
+        print(f"Registros de generación: {len(generacion)}")
+
+        # Despacho coordinado de recursos del día en curso (endpoint lento,
+        # puede tardar cerca de un minuto en responder)
+        despacho = await client.despacho_recurso()
+        print(despacho[["recurso", "periodo", "generacion", "color", "categoria"]].head())
+
+asyncio.run(main())
+```
+
+También disponibles: `intercambios()` (totales por dirección en `df.attrs["totales"]`), `disponibilidad()` y `costos()`.
+
+Antes de usar el cliente, ten en cuenta:
+
+- **Cadena TLS incompleta**: el servidor `ido.xm.com.co` entrega una cadena de certificados TLS incompleta (una configuración errónea conocida del proveedor), por lo que la verificación estándar falla aunque los navegadores funcionen. El constructor acepta `tls_verify=False` como solución explícita y deliberada — la verificación nunca se desactiva en silencio; si puedes, reporta el problema a XM.
+- **Despacho solo del día actual**: `despacho_recurso()` no recibe fecha a propósito, porque el servicio ignora cualquier fecha y siempre devuelve el programa del día en curso.
+
+Todos los clientes (`AsyncParatecClient`, `AsyncXMClient` y `AsyncIdoClient`) aceptan los argumentos opcionales `timeout` y `max_retries` en su constructor, y soportan el gestor de contexto `async with`, que cierra automáticamente la conexión HTTP subyacente.
 
 ## Documentación
 

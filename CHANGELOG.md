@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `AsyncIdoClient` for XM's Informe Diario de Operación (IDO): daily generation, international exchanges, availability and costs archives (`generacion`, `intercambios`, `disponibilidad`, `costos`), plus the current day's coordinated resource dispatch (`despacho_recurso`), all returned as pandas DataFrames with metadata exposed via `df.attrs`; includes an explicit `tls_verify=False` opt-out for the upstream host's incomplete TLS certificate chain
+- IDO documentation coverage: README and the bilingual Getting Started, Examples, and API Reference pages now document the third data source
 - Bilingual (ES/EN) documentation site via `mkdocs-static-i18n`, with a language switcher in the mkdocs-material theme; Spanish remains the default locale
 - New "Getting Started" page (`docs/getting-started.es.md` / `.en.md`), replacing the old `guia.md`, with install instructions (`pip` and `uv`), fixed quickstarts for XM and Paratec, and pointers to Examples and API Reference
 - Paratec substation and transmission-line examples in the Examples page (`docs/examples.es.md` / `.en.md`, replacing `ejemplos.md`), which previously only covered generation and hydrology

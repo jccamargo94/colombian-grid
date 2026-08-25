@@ -14,10 +14,10 @@
 
 ---
 
-`colombian-grid` es una librería de Python diseñada para facilitar el acceso a datos públicos del mercado de electricidad de Colombia, consumiendo directamente el API de Paratec y XM. La librería ofrece una interfaz asíncrona para consultar datos de generadores, infraestructura de transmisión, hidrología y datos del mercado.
+`colombian-grid` es una librería de Python diseñada para facilitar el acceso a datos públicos del mercado de electricidad de Colombia, consumiendo directamente el API de Paratec y XM (incluido su Informe Diario de Operación, IDO). La librería ofrece una interfaz asíncrona para consultar datos de generadores, infraestructura de transmisión, hidrología, datos del mercado y la operación diaria del sistema.
 
 ## Características Principales
-- **Múltiples Fuentes de Datos**: Accede a datos de Paratec y XM, dos de las principales fuentes de información del mercado energético colombiano.
+- **Múltiples Fuentes de Datos**: Accede a datos de Paratec, XM e IDO (el Informe Diario de Operación de XM), tres fuentes clave de información del mercado energético colombiano.
 - **Interfaz Asíncrona**: Construida con `asyncio` y `httpx` para operaciones de I/O no bloqueantes y de alto rendimiento.
 - **Validación de Datos**: Usa `Pydantic` para validar la estructura y tipos de datos de las respuestas del API (opcional).
 - **Manejo Automático de Paginación**: Para consultas en rangos de fechas extensos, la librería automáticamente segmenta las peticiones para cumplir con los límites del API de XM.
@@ -25,7 +25,7 @@
 
 ## ¿Cómo empezar?
 
-Instala el paquete con `pip install colombian-grid` y sigue la guía [Comenzando](getting-started.md) para tu primera consulta a XM o Paratec en pocos minutos.
+Instala el paquete con `pip install colombian-grid` y sigue la guía [Comenzando](getting-started.md) para tu primera consulta a XM, Paratec o IDO en pocos minutos.
 
 ## ¿Tienes dudas o sugerencias?
 Consulta nuestra [documentación](https://jccamargo94.github.io/colombian-grid/) o abre un issue en nuestro repositorio. Estamos aquí para ayudarte. 😊

@@ -28,3 +28,16 @@ This section contains the technical reference for the main classes and methods o
         - get_substation_data
         - get_transmission_line_data
         - get_hydro_data
+
+## Module `colombian_grid.core.ido`
+
+::: colombian_grid.core.ido.AsyncIdoClient
+    handler: python
+    options:
+      members:
+        - __init__
+        - generacion
+        - intercambios
+        - disponibilidad
+        - costos
+        - despacho_recurso
