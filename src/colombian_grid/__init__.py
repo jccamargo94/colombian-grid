@@ -3,6 +3,7 @@
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _package_version
 
+from colombian_grid.core.ido import AsyncIdoClient
 from colombian_grid.core.paratec import AsyncParatecClient
 from colombian_grid.core.xm import AsyncXMClient, SyncXMClient
 
@@ -12,6 +13,7 @@ except PackageNotFoundError:  # package is not installed
     __version__ = "0.0.0.dev0"
 
 __all__ = [
+    "AsyncIdoClient",
     "AsyncParatecClient",
     "AsyncXMClient",
     "SyncXMClient",
