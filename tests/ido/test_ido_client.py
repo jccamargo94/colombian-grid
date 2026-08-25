@@ -6,7 +6,7 @@ approach used in tests/xm and tests/httpx. No live network access happens.
 """
 
 from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
 
 import httpx
@@ -58,11 +58,11 @@ DESPACHO_FIXTURE = {
 
 
 def _mock_response(json_data):
-    """Build a mock httpx.Response like the existing XM/HTTPX tests do."""
-    response = AsyncMock()
+    """Build a mock httpx.Response (json() is synchronous in httpx)."""
+    response = MagicMock()
     response.status_code = 200
     response.raise_for_status = MagicMock()
-    response.json = AsyncMock(return_value=json_data)
+    response.json = MagicMock(return_value=json_data)
     return response
 
 
@@ -191,35 +191,31 @@ class TestFamilyADailyArchive:
         assert requested == ["2026-08-23", "2026-08-23"]
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize(
-        "method,archivo,carpeta,collections",
-        [
-            (
-                "intercambios",
-                "intercambios",
-                "Ido_Intercambios",
-                ["exportaciones", "importaciones"],
-            ),
-            (
-                "disponibilidad",
-                "disponibilidad",
-                "Ido_Disponibilidad",
-                ["categoriasdisponibilidad"],
-            ),
-            ("costos", "costos", "Ido_Costos", ["costos"]),
-        ],
-    )
-    async def test_other_sections_return_tidy_rows(
-        self, method, archivo, carpeta, collections
-    ):
-        """Remaining archive sections flatten to one row per upstream entry."""
-        payload = {
-            key: [{"nombre": f"entry-{key}", "valor": 1.0}] for key in collections
-        }
+    async def test_intercambios_explodes_nested_country_links(self):
+        """intercambios() yields one row per country link and direction."""
         fixture = {
             "ok": True,
             "fecha": "2026-08-23",
-            "payload": {"globales": {}, **payload},
+            "payload": {
+                "globales": {},
+                "exportaciones": [
+                    {
+                        "totalProgramada": 10.0,
+                        "intercambios": [
+                            {"pais": "Ecuador", "programada": 6.0, "real": 5.5},
+                            {"pais": "Venezuela", "programada": 4.0, "real": 4.2},
+                        ],
+                    }
+                ],
+                "importaciones": [
+                    {
+                        "totalProgramada": 2.0,
+                        "intercambios": [
+                            {"pais": "Ecuador", "programada": 2.0, "real": 1.8}
+                        ],
+                    }
+                ],
+            },
         }
         with patch.object(
             AsyncHttpClient,
@@ -227,18 +223,148 @@ class TestFamilyADailyArchive:
             return_value=_mock_response(fixture),
         ) as mock_get:
             async with AsyncIdoClient() as client:
-                df = await getattr(client, method)("2026-08-23")
+                df = await client.intercambios("2026-08-23")
 
         assert mock_get.call_args.kwargs["params"] == {
             "fecha": "2026-08-23",
-            "carpeta": carpeta,
-            "archivo": archivo,
+            "carpeta": "Ido_Intercambios",
+            "archivo": "intercambios",
         }
         assert isinstance(df, pd.DataFrame)
-        assert len(df) == len(collections)
-        leading = ["fecha", "direccion"] if method == "intercambios" else ["fecha"]
-        assert list(df.columns)[: len(leading)] == leading
-        assert df.iloc[-1]["nombre"] == f"entry-{collections[-1]}"
+        assert list(df.columns) == [
+            "fecha",
+            "direccion",
+            "pais",
+            "programada",
+            "real",
+        ]
+        assert len(df) == 3
+
+        ecuador_exp = df[
+            (df["direccion"] == "exportaciones") & (df["pais"] == "Ecuador")
+        ].iloc[0]
+        assert ecuador_exp["programada"] == pytest.approx(6.0)
+        assert ecuador_exp["real"] == pytest.approx(5.5)
+
+        venezuela = df[df["pais"] == "Venezuela"].iloc[0]
+        assert venezuela["direccion"] == "exportaciones"
+        assert venezuela["fecha"] == "2026-08-23"
+
+        # Entry-level totals are exposed per direction via attrs.
+        assert df.attrs["totales"]["exportaciones"] == {"totalProgramada": 10.0}
+        assert df.attrs["totales"]["importaciones"] == {"totalProgramada": 2.0}
+
+    @pytest.mark.asyncio
+    async def test_disponibilidad_explodes_nested_resource_records(self):
+        """disponibilidad() yields one row per resource record per category."""
+        fixture = {
+            "ok": True,
+            "fecha": "2026-08-23",
+            "payload": {
+                "globales": {},
+                "categoriasdisponibilidad": [
+                    {
+                        "tipogen": "HIDRAULICA",
+                        "subtotal": 100.0,
+                        "subtotal_capefectiva": 150.0,
+                        "registrodisponibilidad": [
+                            {
+                                "nombrerecurso": "RECURSO &lt;A&gt;",
+                                "capacidadefectiva": 50.0,
+                                "disponibilidad": 40.0,
+                                "porcentaje": 80.0,
+                            },
+                            {
+                                "nombrerecurso": "RECURSO B",
+                                "capacidadefectiva": 60.0,
+                                "disponibilidad": 30.0,
+                                "porcentaje": 50.0,
+                            },
+                        ],
+                    },
+                    {
+                        "tipogen": "TERMICA",
+                        "subtotal": 20.0,
+                        "subtotal_capefectiva": 25.0,
+                        "registrodisponibilidad": [
+                            {
+                                "nombrerecurso": "RECURSO C",
+                                "capacidadefectiva": 25.0,
+                                "disponibilidad": 20.0,
+                                "porcentaje": 80.0,
+                            }
+                        ],
+                    },
+                ],
+            },
+        }
+        with patch.object(
+            AsyncHttpClient,
+            "get",
+            return_value=_mock_response(fixture),
+        ) as mock_get:
+            async with AsyncIdoClient() as client:
+                df = await client.disponibilidad("2026-08-23")
+
+        assert mock_get.call_args.kwargs["params"] == {
+            "fecha": "2026-08-23",
+            "carpeta": "Ido_Disponibilidad",
+            "archivo": "disponibilidad",
+        }
+        assert isinstance(df, pd.DataFrame)
+        assert list(df.columns) == [
+            "fecha",
+            "tipogen",
+            "nombrerecurso",
+            "capacidadefectiva",
+            "disponibilidad",
+            "porcentaje",
+            "subtotal",
+            "subtotal_capefectiva",
+        ]
+        assert len(df) == 3
+
+        first = df.iloc[0]
+        assert first["tipogen"] == "HIDRAULICA"
+        # Resource names arrive HTML-escaped upstream.
+        assert first["nombrerecurso"] == "RECURSO <A>"
+        assert first["capacidadefectiva"] == pytest.approx(50.0)
+
+        hidraulica = df[df["tipogen"] == "HIDRAULICA"]
+        assert (hidraulica["subtotal"] == 100.0).all()
+        assert (hidraulica["subtotal_capefectiva"] == 150.0).all()
+
+    @pytest.mark.asyncio
+    async def test_costos_flattens_generic_entries(self):
+        """costos() keeps its generic one-row-per-entry flattening."""
+        fixture = {
+            "ok": True,
+            "fecha": "2026-08-23",
+            "payload": {
+                "globales": {},
+                "costos": [
+                    {"nombre": "Costo Bolsa", "valor": 350.0},
+                    {"nombre": "Costo Escasez", "valor": 1500.0},
+                ],
+            },
+        }
+        with patch.object(
+            AsyncHttpClient,
+            "get",
+            return_value=_mock_response(fixture),
+        ) as mock_get:
+            async with AsyncIdoClient() as client:
+                df = await client.costos("2026-08-23")
+
+        assert mock_get.call_args.kwargs["params"] == {
+            "fecha": "2026-08-23",
+            "carpeta": "Ido_Costos",
+            "archivo": "costos",
+        }
+        assert isinstance(df, pd.DataFrame)
+        assert len(df) == 2
+        assert list(df.columns)[:1] == ["fecha"]
+        assert df.iloc[-1]["nombre"] == "Costo Escasez"
 
 
 class TestDespachoRecurso:

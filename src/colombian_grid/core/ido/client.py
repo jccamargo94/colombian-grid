@@ -15,6 +15,7 @@ All endpoints consumed here belong to XM's *Informe Diario de Operación*
   service lives on a different host than the daily archive.
 """
 
+import html
 import time
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -32,6 +33,10 @@ _IDO_TOKEN_URL = "https://ido.xm.com.co/api/auth/client-token"
 _DESPACHO_URL = (
     "https://serviciossistemareportes.xm.com.co/ido/XmService.svc/despachorecurso"
 )
+
+# Observed live latency for the dispatch endpoint is ~60s server-side, so a
+# generous per-request timeout is required (the client default is far lower).
+_DESPACHO_TIMEOUT_SECONDS = 120.0
 
 # Verified carpeta/archivo pairs for the daily archive endpoint.
 _SECTIONS = {
@@ -151,7 +156,7 @@ class AsyncIdoClient(AsyncSourceClient):
             return self._token
         response = await self._http_client.post(_IDO_TOKEN_URL, data=b"")
         response.raise_for_status()
-        payload = await response.json()
+        payload = response.json()
         self._token = payload["access_token"]
         expires_in = float(payload.get("expires_in", 3600))
         self._token_expires_at = time.monotonic() + max(expires_in - 60.0, 60.0)
@@ -165,7 +170,8 @@ class AsyncIdoClient(AsyncSourceClient):
             params={"fecha": fecha, "carpeta": carpeta, "archivo": archivo},
         )
         response.raise_for_status()
-        data = await response.json()
+        # httpx Response.json() is synchronous (unlike aiohttp).
+        data = response.json()
         if data.get("ok") is not True:
             raise IdoApiError(
                 f"IDO archive request failed for section '{section}' on {fecha}: "
@@ -204,13 +210,16 @@ class AsyncIdoClient(AsyncSourceClient):
         rows = []
         for item in payload.get("items", []):
             for elemento in item.get("elemento", []):
-                tipo = elemento.get("nombre")
+                # Upstream ships HTML-escaped names ("Autogeneraci&oacute;n").
+                tipo = html.unescape(elemento.get("nombre") or "")
                 for contenido in elemento.get("contenido", []):
                     rows.append(
                         {
                             "fecha": fecha_iso,
                             "tipo_generacion": tipo,
-                            "nombrerecurso": contenido.get("nombrerecurso"),
+                            "nombrerecurso": html.unescape(
+                                contenido.get("nombrerecurso") or ""
+                            ),
                             "gendesp": contenido.get("gendesp"),
                             "genened": contenido.get("genened"),
                             "genprodesp": contenido.get("genprodesp"),
@@ -252,42 +261,107 @@ class AsyncIdoClient(AsyncSourceClient):
     async def intercambios(self, fecha=None) -> pd.DataFrame:
         """Fetch the daily international exchanges archive for ``fecha``.
 
+        The upstream payload nests one country-level list per direction;
+        this method explodes it into one row per country and direction.
+
         Args:
             fecha: Day to fetch (``date``/``datetime``/ISO string); defaults
                 to yesterday in Colombia time.
 
         Returns:
-            Long-format DataFrame with ``fecha`` and ``direccion``
-            ("exportaciones"/"importaciones") plus the source fields of each
-            exchange-link observation.
+            Long-format DataFrame with columns: ``fecha``, ``direccion``
+            ("exportaciones"/"importaciones"), ``pais``, ``programada`` and
+            ``real``. Per-direction totals are exposed via
+            ``df.attrs["totales"]`` keyed by direction.
 
         Raises:
             IdoApiError: If the upstream response reports ``ok=false``.
         """
-        return await self._fetch_collection(
-            "intercambios",
-            self._resolve_fecha(fecha),
-            ("exportaciones", "importaciones"),
+        data = await self._fetch_section("intercambios", self._resolve_fecha(fecha))
+        payload = data.get("payload", {})
+        rows = []
+        totales: dict[str, dict] = {}
+        for direccion in ("exportaciones", "importaciones"):
+            entries = payload.get(direccion, [])
+            if isinstance(entries, dict):
+                entries = [entries]
+            totales[direccion] = {}
+            for entry in entries or []:
+                totales[direccion] = {
+                    k: v for k, v in entry.items() if not isinstance(v, list)
+                }
+                for link in entry.get("intercambios", []) or []:
+                    rows.append(
+                        {
+                            "fecha": data.get("fecha"),
+                            "direccion": direccion,
+                            "pais": link.get("pais"),
+                            "programada": link.get("programada"),
+                            "real": link.get("real"),
+                        }
+                    )
+        frame = pd.DataFrame(
+            rows, columns=["fecha", "direccion", "pais", "programada", "real"]
         )
+        frame.attrs["totales"] = totales
+        return frame
 
     async def disponibilidad(self, fecha=None) -> pd.DataFrame:
         """Fetch the daily availability archive for ``fecha``.
 
+        Each availability category (``tipogen``) carries a nested resource
+        list; this method explodes it into one row per resource.
+
         Args:
             fecha: Day to fetch (``date``/``datetime``/ISO string); defaults
                 to yesterday in Colombia time.
 
         Returns:
-            DataFrame with a ``fecha`` column followed by the source fields
-            of each availability-category entry.
+            DataFrame with columns: ``fecha``, ``tipogen``,
+            ``nombrerecurso``, ``capacidadefectiva``, ``disponibilidad``,
+            ``porcentaje`` plus per-category ``subtotal`` and
+            ``subtotal_capefectiva`` repeated on each row of that category.
 
         Raises:
             IdoApiError: If the upstream response reports ``ok=false``.
         """
-        return await self._fetch_collection(
-            "disponibilidad",
-            self._resolve_fecha(fecha),
-            ("categoriasdisponibilidad",),
+        data = await self._fetch_section("disponibilidad", self._resolve_fecha(fecha))
+        payload = data.get("payload", {})
+        rows = []
+        categories = payload.get("categoriasdisponibilidad", [])
+        if isinstance(categories, dict):
+            categories = [categories]
+        for category in categories or []:
+            subtotal = category.get("subtotal")
+            subtotal_cap = category.get("subtotal_capefectiva")
+            tipogen = category.get("tipogen") or category.get("tipo")
+            for record in category.get("registrodisponibilidad", []) or []:
+                rows.append(
+                    {
+                        "fecha": data.get("fecha"),
+                        "tipogen": tipogen,
+                        "nombrerecurso": html.unescape(
+                            record.get("nombrerecurso") or ""
+                        ),
+                        "capacidadefectiva": record.get("capacidadefectiva"),
+                        "disponibilidad": record.get("disponibilidad"),
+                        "porcentaje": record.get("porcentaje"),
+                        "subtotal": subtotal,
+                        "subtotal_capefectiva": subtotal_cap,
+                    }
+                )
+        return pd.DataFrame(
+            rows,
+            columns=[
+                "fecha",
+                "tipogen",
+                "nombrerecurso",
+                "capacidadefectiva",
+                "disponibilidad",
+                "porcentaje",
+                "subtotal",
+                "subtotal_capefectiva",
+            ],
         )
 
     async def costos(self, fecha=None) -> pd.DataFrame:
@@ -336,9 +410,12 @@ class AsyncIdoClient(AsyncSourceClient):
         response = await self._http_client.get(
             _DESPACHO_URL,
             headers={"Authorization": f"Bearer {token}"},
+            # This endpoint has been observed taking ~60s server-side.
+            timeout=_DESPACHO_TIMEOUT_SECONDS,
         )
         response.raise_for_status()
-        data = await response.json()
+        # httpx Response.json() is synchronous (unlike aiohttp).
+        data = response.json()
         rows = []
         for category in data.get("categoriasdespachorecurso", []):
             recurso = category.get("nombre_recurso")
